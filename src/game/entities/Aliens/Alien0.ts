@@ -13,9 +13,9 @@ export class Alien0 extends Alien {
             key: "walk",
             frames: this.anims.generateFrameNumbers("alien0", {
                 start: 0,
-                end: 3,
+                end: 10,
             }),
-            frameRate: 2,
+            frameRate: 10,
             repeat: -1,
         });
 

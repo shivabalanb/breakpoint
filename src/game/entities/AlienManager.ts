@@ -31,7 +31,7 @@ export class AlienManager {
         if (this.wave == 1) {
             this.startWave1();
         } else if (this.wave === 2) {
-            this.startWave2();
+            // this.startWave2();
         }
     }
 
@@ -40,7 +40,7 @@ export class AlienManager {
             delay: Math.Between(1000, 2000),
             callback: () => this.spawnAlien(Alien0),
             callbackScope: this,
-            repeat: 10,
+            repeat: 1,
         });
     }
 

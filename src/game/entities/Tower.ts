@@ -9,6 +9,28 @@ export class Tower extends Phaser.Physics.Arcade.Sprite {
         this.setImmovable(true);
         this.setOrigin(0, 0);
         this.body?.setOffset(-5, 0);
+
+        this.anim();
+    }
+
+    anim() {
+        this.anims.create({
+            key: "idle",
+            frames: this.anims.generateFrameNumbers("tower", {
+                start: 0,
+                end: 10,
+            }),
+            frameRate: 10,
+            // repeat: -1,
+        });
+
+        this.scene.time.addEvent({
+            delay: 5000,
+            callback: () => {
+                this.play("idle");
+            },
+            loop: true,
+        });
     }
 
     public takeDamage(amount: number) {

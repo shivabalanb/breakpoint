@@ -9,6 +9,7 @@ import { Alien } from "../entities/Aliens/Alien";
 export class Game extends Scene {
     private camera: Phaser.Cameras.Scene2D.Camera;
     private tower: Tower;
+    private bg: Phaser.GameObjects.Sprite;
     private vanguard: Vangaurd;
     private alienManager: AlienManager;
     private bulletManager: BulletManager;
@@ -26,13 +27,19 @@ export class Game extends Scene {
 
         // camera + background
         this.camera = this.cameras.main;
-        this.camera.setBackgroundColor(0x000000);
+        // this.camera.setBackgroundColor(0x000000);
         this.add.image(512, 384, "background").setAlpha(0.4);
-        this.add.image(0, 550, "ground").setOrigin(0, 0);
+        this.bg = this.add.sprite(0, 0, "bg").setOrigin(0, 0);
+        // if (this.textures.exists("bg")) {
+        //     this.add.sprite(0, 0, "bg").setOrigin(0, 0);
+        //     console.log("Background texture found and loaded");
+        // } else {
+        //     console.error("Background texture not found!");
+        // }
 
         // entities: tower, gun, bullets, enemy
-        this.tower = new Tower(this, -10, 220);
-        this.vanguard = new Vangaurd(this, 100, 250);
+        this.tower = new Tower(this, -10, 50);
+        this.vanguard = new Vangaurd(this, 50, 250);
         this.bulletManager = new BulletManager(this);
         this.alienManager = new AlienManager(this);
         this.timeText = this.add.text(10, 10, "", {
@@ -43,6 +50,23 @@ export class Game extends Scene {
         this.setupCollisions();
 
         this.setupInputHandlers();
+
+        this.anims.create({
+            key: "bg",
+            frames: this.anims.generateFrameNumbers("bg", {
+                start: 0,
+                end: 8,
+            }),
+            frameRate: 10,
+        });
+
+        this.time.addEvent({
+            delay: 5000,
+            callback: () => {
+                this.bg.play("bg");
+            },
+            loop: true,
+        });
 
         // this.time.delayedCall(10000, () => {
         //     this.changeScene();
@@ -81,12 +105,15 @@ export class Game extends Scene {
         this.updateTimeText();
 
         if (this.isFiring) {
+            this.vanguard.anim();
             this.bulletManager.shoot(
                 this.vanguard.x,
                 this.vanguard.y,
                 this.vanguard.rotation,
                 time
             );
+        } else {
+            this.vanguard.anims.stop();
         }
 
         this.bulletManager.cleanup();
@@ -102,9 +129,10 @@ export class Game extends Scene {
                 .padStart(2, "0")} seconds`
         );
 
-        if (elapsedTime >= 30) { // 5 minutes = 300 seconds
-            this.scene.start("GameWin");
-        }
+        // if (elapsedTime >= 30) {
+        //     // 5 minutes = 300 seconds
+        //     this.scene.start("GameWin");
+        // }
     }
 
     private handleTowerCollision(tower: any, alien: any) {

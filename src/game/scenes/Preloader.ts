@@ -26,14 +26,47 @@ export class Preloader extends Scene {
         //  Load the assets for the game - Replace with your own assets
         this.load.setPath("assets");
 
-        this.load.image("ground", "ground.png");
-        this.load.image("tower", "tower.png");
-        this.load.image("gun", "gun.png");
-        this.load.image("star", "star.png");
-        this.load.spritesheet("alien0", "alien0.png", {
-            frameWidth: 32,
-            frameHeight: 32,
-        });
+        this.load.spritesheet(
+            "bg",
+            "bg_spritesheet.png",
+            // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/ground.png"
+            {
+                frameWidth: 1024,
+                frameHeight: 700,
+            }
+        );
+        this.load.spritesheet(
+            "tower",
+            "tower_spritesheet.png",
+            // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/tower.png"
+            {
+                frameWidth: 150,
+                frameHeight: 650,
+            }
+        );
+        this.load.spritesheet(
+            "vanguard",
+            "vanguard_spritesheet.png",
+            // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/gun.png"
+            {
+                frameWidth: 150,
+                frameHeight: 75,
+            }
+        );
+        this.load.image(
+            "star",
+            "star.png"
+            // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/star.png"
+        );
+        this.load.spritesheet(
+            "alien0",
+            "alien0_spritesheet.png",
+            // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/alien0.png",
+            {
+                frameWidth: 64,
+                frameHeight: 64,
+            }
+        );
     }
 
     create() {
