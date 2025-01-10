@@ -1,25 +1,25 @@
 import { Alien } from "./Alien";
 
-export class Alien1 extends Alien {
+export class Alien5 extends Alien {
     constructor(scene: Phaser.Scene) {
         const x = scene.cameras.main.width;
         const y = Phaser.Math.Between(100, 300);
-        super(scene, x, y, "alien1");
 
-        this._health = 200;
-        this._speed = 150;
-        this._scale = 1.4;
-        this._damage = 50;
+        super(scene, x, y, "alien5");
 
+        this._health = 2000;
+        this._speed = 20;
+        this._scale = 1.8;
+        this._damage = 500;
 
         // animaiton
         this.anims.create({
-            key: "walk",
-            frames: this.anims.generateFrameNumbers("alien1", {
+            key: "move",
+            frames: this.anims.generateFrameNumbers("alien5", {
                 start: 0,
-                end: 10,
+                end: 12,
             }),
-            frameRate: 2,
+            frameRate: 10,
             repeat: -1,
         });
 
@@ -27,21 +27,18 @@ export class Alien1 extends Alien {
     }
 
     move() {
-        this.scene.tweens.killTweensOf(this);
-        this.alpha = 1;
-        this.play("walk");
-
+        this.play("move");
         // movement
         this.scene.tweens.add({
             targets: this,
-            y: this.y + 100,
+            y: this.y + 5,
             duration: 500,
-            ease: "Expo",
+            ease: "Linear",
             yoyo: true,
             repeat: -1,
         });
 
-        const randomSpeed = Phaser.Math.Between(60, this._speed);
+        const randomSpeed = Phaser.Math.Between(30, this._speed);
         this.setVelocityX(-randomSpeed);
     }
 }

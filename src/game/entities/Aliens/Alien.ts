@@ -1,14 +1,11 @@
 export abstract class Alien extends Phaser.Physics.Arcade.Sprite {
-    public health: number;
-    constructor(
-        scene: Phaser.Scene,
-        x: number,
-        y: number,
-        texture: string,
-        health: number
-    ) {
+    protected _health: number;
+    protected _speed: number;
+    protected _scale: number;
+    protected _damage: number;
+
+    constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
         super(scene, x, y, texture);
-        this.health = health;
         scene.add.existing(this);
         scene.physics.add.existing(this);
     }
@@ -19,13 +16,21 @@ export abstract class Alien extends Phaser.Physics.Arcade.Sprite {
                 "Scene is undefined. Make sure the Alien is properly added to a scene."
             );
         }
-        this.setScale(1.2);
-        this.walk();
+        this.move();
+    }
+
+    getDamage() {
+        return this._damage;
+    }
+
+    getHealth() {
+        return this._health;
     }
 
     takeDamage(amount: number) {
-        this.health = Math.max(0, this.health - amount);
-        if (this.health <= 0) {
+        this._health = Math.max(0, this._health - amount);
+
+        if (this._health <= 0) {
             this.scene.tweens.add({
                 targets: this,
                 alpha: 0.3,
@@ -34,15 +39,24 @@ export abstract class Alien extends Phaser.Physics.Arcade.Sprite {
             });
             this.destroy();
         } else {
-            this.scene.tweens.add({
-                targets: this,
-                alpha: 0.5,
-                duration: 100,
-                yoyo: true,
-            });
+            if (!this.getData("isHit")) {
+                this.setData("isHit", true);
+
+                this.scene.tweens.add({
+                    targets: this,
+                    alpha: 0.5,
+                    duration: 100,
+                    yoyo: true,
+                    repeat: 2,
+                    onComplete: () => {
+                        this.setAlpha(1);
+                        this.setData("isHit", false);
+                    },
+                });
+            }
         }
     }
 
-    abstract walk(): void;
+    abstract move(): void;
 }
 
