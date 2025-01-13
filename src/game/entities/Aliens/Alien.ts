@@ -1,4 +1,5 @@
 export abstract class Alien extends Phaser.Physics.Arcade.Sprite {
+    protected _name: string;
     protected _health: number;
     protected _speed: number;
     protected _scale: number;
@@ -27,7 +28,7 @@ export abstract class Alien extends Phaser.Physics.Arcade.Sprite {
         return this._health;
     }
 
-    takeDamage(amount: number) {
+    public takeDamage(amount: number) {
         this._health = Math.max(0, this._health - amount);
 
         if (this._health <= 0) {

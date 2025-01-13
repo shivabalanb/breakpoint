@@ -10,6 +10,7 @@ export class Alien2 extends Alien {
 
         super(scene, x, y, "alien2");
 
+        this._name = "pinecryst";
         this._health = 500;
         this._speed = 20;
         this._scale = 1.6;
@@ -43,7 +44,8 @@ export class Alien2 extends Alien {
         });
 
         const randomSpeed = Phaser.Math.Between(5, this._speed);
-        this.setVelocityX(-randomSpeed);
+        // this.setVelocityX(-randomSpeed);
+        this.setVelocityX(-1);
     }
 }
 

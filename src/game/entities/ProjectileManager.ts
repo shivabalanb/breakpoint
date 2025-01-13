@@ -1,42 +1,55 @@
 import { Bullet } from "./Projectiles/Bullet";
-import { Laser } from "./Projectiles/Laser";
+// import { Laser } from "./Projectiles/Laser";
 import { Projectile } from "./Projectiles/Projectile";
 import { Rocket } from "./Projectiles/Rocket";
-import { GunType } from "./Vanguard";
+// import { GunType } from "./Deprecated";
 
 export class ProjectileManager {
     private scene: Phaser.Scene;
     private projectiles: Phaser.Physics.Arcade.Group;
-    private projectile: Projectile;
+    // private laser: Laser;
+    // public gunType: GunType;
 
     constructor(scene: Phaser.Scene) {
         this.scene = scene;
         this.projectiles = scene.physics.add.group({
-            classType: Phaser.Physics.Arcade.Sprite,
+            classType: Projectile,
         });
-
-        this.projectile = new Bullet(this.scene, this.projectiles);
+        // this.laser = new Laser(scene);
+        // this.gunType = GunType.MACHINE_GUN;
     }
 
-    public changeProjectile(gunType: GunType) {
-        switch (gunType) {
-            case GunType.MACHINE_GUN:
-                this.projectile = new Bullet(this.scene, this.projectiles);
-                break;
-            case GunType.ROCKET_LAUNCHER:
-                this.projectile = new Rocket(this.scene, this.projectiles);
-                break;
-            case GunType.LASER:
-                this.projectile = new Laser(this.scene, this.projectiles);
-                break;
-            default:
-                break;
-        }
-    }
+    // public changeProjectile(gunType: GunType) {
+    //     this.gunType = gunType;
+    // }
 
-    shoot(x: number, y: number, rotation: number) {
-        this.projectile.shoot(x, y, rotation);
-    }
+    // shoot(x: number, y: number, rotation: number) {
+    //     if (this.gunType == GunType.LASER) {
+    //         this.laser.shoot(x, y, rotation);
+    //     }
+
+    //     let projectile: Projectile;
+    //     switch (this.gunType) {
+    //         case GunType.MACHINE_GUN:
+    //             projectile = new Bullet(this.scene, x, y);
+    //             break;
+    //         case GunType.ROCKET_LAUNCHER:
+    //             projectile = new Rocket(this.scene, x, y);
+    //             break;
+    //         default:
+    //             return;
+    //     }
+
+    //     this.projectiles.add(projectile, true);
+
+    //     projectile.setScale(projectile._scale);
+    //     projectile.setRotation(rotation);
+    //     this.scene.physics.velocityFromRotation(
+    //         rotation,
+    //         projectile._speed,
+    //         projectile.body?.velocity
+    //     );
+    // }
 
     cleanup() {
         this.projectiles.children.each(

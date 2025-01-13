@@ -3,9 +3,13 @@ import { Alien } from "./Alien";
 export class Alien0 extends Alien {
     constructor(scene: Phaser.Scene) {
         const x = scene.cameras.main.width;
-        const y = Phaser.Math.Between(scene.cameras.main.height - 120,scene.cameras.main.height - 180);
+        const y = Phaser.Math.Between(
+            scene.cameras.main.height - 120,
+            scene.cameras.main.height - 180
+        );
         super(scene, x, y, "alien0");
 
+        this._name = "voidling";
         this._health = 100;
         this._speed = 100;
         this._scale = 1.2;
@@ -27,7 +31,7 @@ export class Alien0 extends Alien {
 
     move() {
         this.play("move");
-        
+
         // movement
         this.scene.tweens.add({
             targets: this,
@@ -39,6 +43,7 @@ export class Alien0 extends Alien {
         });
 
         const randomSpeed = Phaser.Math.Between(20, this._speed);
-        this.setVelocityX(-randomSpeed);
+        // this.setVelocityX(-randomSpeed);
+        this.setVelocityX(-1);
     }
 }

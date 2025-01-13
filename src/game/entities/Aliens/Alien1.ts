@@ -6,11 +6,11 @@ export class Alien1 extends Alien {
         const y = Phaser.Math.Between(100, 300);
         super(scene, x, y, "alien1");
 
+        this._name = "scythe";
         this._health = 200;
         this._speed = 150;
         this._scale = 1.4;
         this._damage = 50;
-
 
         // animaiton
         this.anims.create({
@@ -42,7 +42,8 @@ export class Alien1 extends Alien {
         });
 
         const randomSpeed = Phaser.Math.Between(60, this._speed);
-        this.setVelocityX(-randomSpeed);
+        // this.setVelocityX(-randomSpeed);
+        this.setVelocityX(-1);
     }
 }
 

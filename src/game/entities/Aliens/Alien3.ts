@@ -2,11 +2,15 @@ import { Alien } from "./Alien";
 
 export class Alien3 extends Alien {
     constructor(scene: Phaser.Scene) {
-        const x = scene.cameras.main.width;
+        const x = Phaser.Math.Between(
+            scene.cameras.main.width + 50,
+            scene.cameras.main.width
+        );
         const y = Phaser.Math.Between(100, 300);
 
         super(scene, x, y, "alien3");
 
+        this._name = "zix";
         this._health = 50;
         this._speed = 80;
         this._scale = 1;
@@ -49,7 +53,8 @@ export class Alien3 extends Alien {
         });
 
         const randomSpeed = Phaser.Math.Between(5, this._speed);
-        this.setVelocityX(-randomSpeed);
+        // this.setVelocityX(-randomSpeed);
+        this.setVelocityX(-1);
     }
 }
 

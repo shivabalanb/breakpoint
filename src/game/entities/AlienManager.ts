@@ -32,16 +32,27 @@ export class AlienManager {
     }
 
     private startSpawning() {
-        switch (this.wave) {
-            case 1:
-                this.startWave1_0();
-                break;
-            case 2:
-                this.startWave2();
-                break;
-            default:
-                break;
-        }
+        this.spawnAlien(Alien5);
+        this.spawnAlien(Alien5);
+        this.spawnAlien(Alien5);
+        this.spawnAlien(Alien5);
+        this.spawnAlien(Alien5);
+        this.spawnAlien(Alien5);
+        this.spawnAlien(Alien5);
+        this.spawnAlien(Alien5);
+        this.spawnAlien(Alien5);
+        this.spawnAlien(Alien5);
+
+        // switch (this.wave) {
+        //     case 1:
+        //         this.startWave1_0();
+        //         break;
+        //     case 2:
+        //         this.startWave2();
+        //         break;
+        //     default:
+        //         break;
+        // }
     }
 
     private startWave1_0() {
@@ -60,7 +71,6 @@ export class AlienManager {
     }
 
     private startWave1_1() {
-        console.log("yay");
         this.scene.time.addEvent({
             delay: Math.Between(500, 1000),
             callback: () => this.spawnAlien(Alien0),

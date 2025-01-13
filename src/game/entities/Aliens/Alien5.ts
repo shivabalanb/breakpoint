@@ -7,6 +7,7 @@ export class Alien5 extends Alien {
 
         super(scene, x, y, "alien5");
 
+        this._name = "dravok";
         this._health = 2000;
         this._speed = 20;
         this._scale = 1.8;
@@ -39,7 +40,8 @@ export class Alien5 extends Alien {
         });
 
         const randomSpeed = Phaser.Math.Between(30, this._speed);
-        this.setVelocityX(-randomSpeed);
+        // this.setVelocityX(-randomSpeed);
+        this.setVelocityX(-1);
     }
 }
 

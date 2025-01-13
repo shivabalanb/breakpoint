@@ -78,6 +78,11 @@ export class Preloader extends Scene {
             // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/star.png"
         );
 
+        this.load.spritesheet("explosion", "explosion_spritesheet.png", {
+            frameWidth: 100,
+            frameHeight: 100,
+        });
+
         // aliens
         this.load.spritesheet(
             "alien0",
@@ -124,14 +129,10 @@ export class Preloader extends Scene {
                 frameHeight: 64,
             }
         );
-        this.load.spritesheet(
-            "alien5",
-            "alien5_spritesheet.png",
-            {
-                frameWidth: 200,
-                frameHeight: 128,
-            }
-        );
+        this.load.spritesheet("alien5", "alien5_spritesheet.png", {
+            frameWidth: 200,
+            frameHeight: 128,
+        });
     }
 
     create() {

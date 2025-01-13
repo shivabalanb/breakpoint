@@ -1,23 +1,32 @@
 import { EventBus } from "../EventBus";
 import { Scene } from "phaser";
 import { Tower } from "../entities/Tower";
-import { Direction, Vangaurd } from "../entities/Vanguard";
 import { AlienManager } from "../entities/AlienManager";
 import { ProjectileManager } from "../entities/ProjectileManager";
 import { Projectile } from "../entities/Projectiles/Projectile";
+import { Rocket } from "../entities/Projectiles/Rocket";
+import { Alien } from "../entities/Aliens/Alien";
+import { MachineGun } from "../entities/Vanguards/MachineGun";
+import { Direction, Vanguard } from "../entities/Vanguards/Vanguard";
+import { RocketLauncher } from "../entities/Vanguards/RocketLauncher";
+import { Laser } from "../entities/Vanguards/Laser";
 
 export class Game extends Scene {
     private bg: Phaser.GameObjects.Sprite;
     private timeText: Phaser.GameObjects.Text;
 
     private tower: Tower;
-    private vanguard: Vangaurd;
+    private vanguard: Vanguard;
+    private vanguardIndex: number = 0;
+    private machineGun: MachineGun;
+    private rocketLauncher: RocketLauncher;
+    private laser: Laser;
     private alienManager: AlienManager;
     private projectileManager: ProjectileManager;
 
-    private isFiring: boolean = false;
     private gameTimer: number = 0;
     private timerEvent: Phaser.Time.TimerEvent;
+    private clickFlag: boolean;
 
     constructor() {
         super("Game");
@@ -30,7 +39,28 @@ export class Game extends Scene {
         // entities: tower, gun, bullets, alien
         this.tower = new Tower(this, -10, 50);
         this.projectileManager = new ProjectileManager(this);
-        this.vanguard = new Vangaurd(this, 60, 250, this.projectileManager);
+        this.machineGun = new MachineGun(
+            this,
+            60,
+            250,
+            this.projectileManager.getProjectileGroup()
+        );
+        this.rocketLauncher = new RocketLauncher(
+            this,
+            60,
+            250,
+            this.projectileManager.getProjectileGroup()
+        );
+        this.laser = new Laser(
+            this,
+            60,
+            250,
+            this.projectileManager.getProjectileGroup()
+        );
+        this.vanguard = this.machineGun;
+        this.rocketLauncher.setVisible(false);
+        this.laser.setVisible(false);
+
         this.alienManager = new AlienManager(this);
         this.timeText = this.add.text(10, 10, "00:00", {
             font: "16px Arial",
@@ -70,31 +100,125 @@ export class Game extends Scene {
     }
 
     private handleProjectileEnemyOverlap(projectile: any, alien: any) {
+        if (projectile instanceof Rocket) {
+            // Create explosion and handle area damage for rockets
+            const explosion = this.add.sprite(projectile.x, projectile.y, "explosion");
+            explosion.setScale(4);
+            explosion.play("explode");
+            explosion.on("animationcomplete", () => {
+                explosion.destroy();
+            });
+    
+            // Get nearby enemies within explosion radius
+            const nearbyEnemies = this.physics.overlapCirc(projectile.x, projectile.y, 50);
+            nearbyEnemies.forEach((body: Phaser.Physics.Arcade.Body | Phaser.Physics.Arcade.StaticBody) => {
+                if (body.gameObject && body.gameObject instanceof Alien) {
+                    body.gameObject.takeDamage(projectile._damage);
+                }
+            });
+        } else {
+            // Regular projectile damage
+            alien.takeDamage(projectile._damage);
+        }
         projectile.destroy();
-        alien.takeDamage(50);
+    }
+
+    private createExplosion(x: number, y: number, projectile: Projectile) {
+        const explosion = this.add.sprite(x, y, "explosion");
+
+        explosion.setScale(4);
+        explosion.play("explode");
+        explosion.on("animationcomplete", () => {
+            explosion.destroy();
+        });
+
+        const nearbyEnemies = this.physics.overlapCirc(x, y, 50);
+        nearbyEnemies.forEach(
+            (
+                body:
+                    | Phaser.Physics.Arcade.Body
+                    | Phaser.Physics.Arcade.StaticBody
+            ) => {
+                if (body.gameObject && body.gameObject instanceof Alien) {
+                    // Calculate damage based on distance from explosion
+                    const distance = Phaser.Math.Distance.Between(
+                        x,
+                        y,
+                        body.x,
+                        body.y
+                    );
+                    const damage = Math.max(0, Math.floor(projectile._damage));
+                    body.gameObject.takeDamage(damage);
+                }
+            }
+        );
     }
 
     private setupInputHandlers() {
-        this.input.on("pointerdown", () => (this.isFiring = true));
-        this.input.on("pointerup", () => (this.isFiring = false));
+        this.input.on("pointerdown", () => {
+            this.clickFlag = true;
+        });
+        this.input.on("pointerup", () => (this.clickFlag = false));
         this.input.on("pointermove", (pointer: Phaser.Input.Pointer) => {
             this.vanguard.rotateToPointer(pointer);
         });
         this.input.keyboard?.on("keydown-W", () => {
-            this.vanguard.moveVertical(Direction.UP);
+            this.machineGun.moveVertical(Direction.UP);
+            this.rocketLauncher.moveVertical(Direction.UP);
+            this.laser.moveVertical(Direction.UP);
         });
         this.input.keyboard?.on("keydown-S", () => {
-            this.vanguard.moveVertical(Direction.DOWN);
+            this.machineGun.moveVertical(Direction.DOWN);
+            this.rocketLauncher.moveVertical(Direction.DOWN);
+            this.laser.moveVertical(Direction.DOWN);
         });
         this.input.keyboard?.on("keydown-A", () => {
-            this.vanguard.changeGun(Direction.LEFT);
+            this.switchVanguard(Direction.LEFT);
+            // this.vanguard.changeGun(Direction.LEFT);
         });
         this.input.keyboard?.on("keydown-D", () => {
-            this.vanguard.changeGun(Direction.RIGHT);
+            this.switchVanguard(Direction.RIGHT);
+            // this.vanguard.changeGun(Direction.RIGHT);
         });
     }
 
+    update(time: number) {
+        if (this.clickFlag) {
+            if (
+                this.vanguard._isReloading ||
+                this.time.now <
+                    this.vanguard._fireRate + this.vanguard._lastFired
+            ) {
+                this.vanguard._isFiring = false;
+            } else {
+                this.vanguard._isFiring = true;
+            }
+            if (this.vanguard._isFiring) {
+                const position = this.calculateRotatedOffset(100, 10);
+                this.vanguard.shoot(
+                    position.x,
+                    position.y,
+                    this.vanguard.rotation
+                );
+            } else {
+                this.vanguard.anims.stop();
+            }
+        }
+
+        this.projectileManager.cleanup();
+    }
+
     private environmentActions() {
+        this.anims.create({
+            key: "explode",
+            frames: this.anims.generateFrameNumbers("explosion", {
+                start: 0,
+                end: 6,
+            }),
+            frameRate: 20,
+            repeat: 0,
+        });
+
         this.anims.create({
             key: "bg",
             frames: this.anims.generateFrameNumbers("bg", {
@@ -153,20 +277,49 @@ export class Game extends Scene {
         };
     }
 
-    update(time: number) {
-        if (this.isFiring) {
-            const position = this.calculateRotatedOffset(100, 10);
-            this.vanguard.anim();
-            this.projectileManager.shoot(
-                position.x,
-                position.y,
-                this.vanguard.rotation
-            );
+    switchVanguard(direction: Direction) {
+        this.vanguard.setVisible(false);
+
+        if (direction == Direction.LEFT) {
+            if (this.vanguardIndex == 0) {
+                this.vanguardIndex = 2;
+            } else {
+                this.vanguardIndex--;
+            }
         } else {
-            this.vanguard.anims.stop();
+            if (this.vanguardIndex == 2) {
+                this.vanguardIndex = 0;
+            } else {
+                this.vanguardIndex++;
+            }
         }
 
-        this.projectileManager.cleanup();
+        switch (this.vanguardIndex) {
+            case VanguardType.MACHINE_GUN:
+                this.vanguard = this.machineGun;
+                break;
+            case VanguardType.ROCKET_LAUNCHER:
+                this.vanguard = this.rocketLauncher;
+                break;
+            case VanguardType.LASER:
+                this.vanguard = this.laser;
+                break;
+            default:
+                break;
+        }
+        this.vanguard.setVisible(true);
     }
 }
+
+export enum VanguardType {
+    MACHINE_GUN,
+    ROCKET_LAUNCHER,
+    LASER,
+}
+
+export const vanguardMap = new Map<VanguardType, [string]>([
+    [VanguardType.MACHINE_GUN, ["vanguard_m"]],
+    [VanguardType.ROCKET_LAUNCHER, ["vanguard_r"]],
+    [VanguardType.LASER, ["vanguard_l"]],
+]);
 
