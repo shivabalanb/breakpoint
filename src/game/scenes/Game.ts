@@ -24,7 +24,7 @@ export class Game extends Scene {
     private alienManager: AlienManager;
     private projectileManager: ProjectileManager;
 
-    private gameTimer: number = 0;
+    private gameTimer: number;
     private timerEvent: Phaser.Time.TimerEvent;
     private clickFlag: boolean;
 
@@ -88,7 +88,7 @@ export class Game extends Scene {
         this.physics.add.overlap(
             this.projectileManager.getProjectileGroup(),
             this.alienManager.getAlienGroup(),
-            this.handleProjectileEnemyOverlap,
+            this.handleProjectileAlienOverlap,
             undefined,
             this
         );
@@ -99,26 +99,44 @@ export class Game extends Scene {
         alien.destroy();
     }
 
-    private handleProjectileEnemyOverlap(projectile: any, alien: any) {
+    private handleProjectileAlienOverlap(projectile: any, alien: any) {
         if (projectile instanceof Rocket) {
             // Create explosion and handle area damage for rockets
-            const explosion = this.add.sprite(projectile.x, projectile.y, "explosion");
+            const explosion = this.add.sprite(
+                projectile.x,
+                projectile.y,
+                "explosion"
+            );
             explosion.setScale(4);
             explosion.play("explode");
             explosion.on("animationcomplete", () => {
                 explosion.destroy();
             });
-    
+
             // Get nearby enemies within explosion radius
-            const nearbyEnemies = this.physics.overlapCirc(projectile.x, projectile.y, 50);
-            nearbyEnemies.forEach((body: Phaser.Physics.Arcade.Body | Phaser.Physics.Arcade.StaticBody) => {
-                if (body.gameObject && body.gameObject instanceof Alien) {
-                    body.gameObject.takeDamage(projectile._damage);
+            const nearbyEnemies = this.physics.overlapCirc(
+                projectile.x,
+                projectile.y,
+                100
+            );
+            nearbyEnemies.forEach(
+                (
+                    body:
+                        | Phaser.Physics.Arcade.Body
+                        | Phaser.Physics.Arcade.StaticBody
+                ) => {
+                    if (body.gameObject && body.gameObject instanceof Alien) {
+                        if (!body.gameObject._isInvincible) {
+                            body.gameObject.takeDamage(projectile._damage);
+                        }
+                    }
                 }
-            });
+            );
         } else {
             // Regular projectile damage
-            alien.takeDamage(projectile._damage);
+            if (!(alien as Alien)._isInvincible) {
+                alien.takeDamage(projectile._damage);
+            }
         }
         projectile.destroy();
     }
@@ -158,9 +176,16 @@ export class Game extends Scene {
         this.input.on("pointerdown", () => {
             this.clickFlag = true;
         });
-        this.input.on("pointerup", () => (this.clickFlag = false));
+        this.input.on("pointerup", () => {
+            this.vanguard.once("animationcomplete", () => {
+                this.vanguard.anims.stop();
+            });
+            this.clickFlag = false;
+        });
         this.input.on("pointermove", (pointer: Phaser.Input.Pointer) => {
-            this.vanguard.rotateToPointer(pointer);
+            this.machineGun.rotateToPointer(pointer);
+            this.rocketLauncher.rotateToPointer(pointer);
+            this.laser.rotateToPointer(pointer);
         });
         this.input.keyboard?.on("keydown-W", () => {
             this.machineGun.moveVertical(Direction.UP);
@@ -173,16 +198,22 @@ export class Game extends Scene {
             this.laser.moveVertical(Direction.DOWN);
         });
         this.input.keyboard?.on("keydown-A", () => {
+            this.vanguard.anims.stop();
             this.switchVanguard(Direction.LEFT);
             // this.vanguard.changeGun(Direction.LEFT);
         });
         this.input.keyboard?.on("keydown-D", () => {
+            this.vanguard.anims.stop();
             this.switchVanguard(Direction.RIGHT);
             // this.vanguard.changeGun(Direction.RIGHT);
         });
     }
 
-    update(time: number) {
+    update() {
+        if (this.gameTimer == 300) {
+            console.log("gameOver");
+            this.scene.start("GameOver");
+        }
         if (this.clickFlag) {
             if (
                 this.vanguard._isReloading ||
@@ -194,17 +225,16 @@ export class Game extends Scene {
                 this.vanguard._isFiring = true;
             }
             if (this.vanguard._isFiring) {
+                this.vanguard.anim(this.vanguard._name);
+
                 const position = this.calculateRotatedOffset(100, 10);
                 this.vanguard.shoot(
                     position.x,
                     position.y,
                     this.vanguard.rotation
                 );
-            } else {
-                this.vanguard.anims.stop();
             }
         }
-
         this.projectileManager.cleanup();
     }
 
@@ -246,6 +276,8 @@ export class Game extends Scene {
 
     private updateTimer() {
         this.gameTimer++;
+        this.alienManager.updateWaves(this.gameTimer);
+
         const minutes = Math.floor(this.gameTimer / 60);
         const seconds = this.gameTimer % 60;
         const fps = Math.floor(this.game.loop.actualFps);
@@ -255,12 +287,6 @@ export class Game extends Scene {
                 .toString()
                 .padStart(2, "0")} ${fps}`
         );
-    }
-
-    private changeScene() {
-        // const gameTime = Math.floor((this.time.now - this.startTime) / 1000);
-        // this.registry.set("score", gameTime);
-        this.scene.start("GameOver");
     }
 
     calculateRotatedOffset(offsetX: number, offsetY: number) {

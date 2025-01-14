@@ -59,7 +59,7 @@ export class ProjectileManager {
                     b.x < 0 ||
                     b.x > this.scene.cameras.main.width ||
                     b.y < 0 ||
-                    b.y > this.scene.cameras.main.height - 100
+                    b.y > this.scene.cameras.main.height - 20
                 ) {
                     b.destroy();
                 }

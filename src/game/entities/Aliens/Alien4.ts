@@ -25,6 +25,9 @@ export class Alien4 extends Alien {
         });
 
         this.setScale(this._scale);
+
+        const radius = (this.width * 0.5) / 2;
+        this.body?.setCircle(radius, 15, 10);
     }
 
     move() {

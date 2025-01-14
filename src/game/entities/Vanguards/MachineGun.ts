@@ -10,6 +10,7 @@ export class MachineGun extends Vanguard {
         projectiles: Phaser.Physics.Arcade.Group
     ) {
         super(scene, x, y, "vanguard_m", projectiles);
+        this._name = "vanguard_m";
 
         this._maxAmmo = 50;
         this._ammo = this._maxAmmo;
@@ -17,18 +18,16 @@ export class MachineGun extends Vanguard {
         this._reloadTime = 5000;
 
         this.anims.create({
-            key: "vanguard_m",
-            frames: this.anims.generateFrameNumbers("vanguard_m", {
+            key: this._name,
+            frames: this.anims.generateFrameNumbers(this._name, {
                 start: 0,
                 end: 5,
             }),
-            frameRate: 10,
-            repeat: -1,
+            frameRate: 20,
         });
     }
 
     shoot(x: number, y: number, rotation: number) {
-        this.anim('vanguard_m')
         this._ammo--;
         let projectile = new Bullet(this.scene, x, y);
         this.projectiles.add(projectile, true);

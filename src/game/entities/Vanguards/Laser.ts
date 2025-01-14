@@ -15,6 +15,7 @@ export class Laser extends Vanguard {
         projectiles: Phaser.Physics.Arcade.Group
     ) {
         super(scene, x, y, "vanguard_l", projectiles);
+        this._name = "vanguard_l";
         this._damage = 5000;
 
         this._isReloading = false;
@@ -25,19 +26,16 @@ export class Laser extends Vanguard {
         this.laserLine.setVisible(false);
 
         this.anims.create({
-            key: "vanguard_l",
-            frames: this.anims.generateFrameNumbers("vanguard_l", {
+            key: this._name,
+            frames: this.anims.generateFrameNumbers(this._name, {
                 start: 0,
-                end: 5,
+                end: 6,
             }),
-            frameRate: 10,
-            repeat: -1,
+            frameRate: 20,
         });
     }
 
     shoot(x: number, y: number, rotation: number): void {
-        this.anim('vanguard_l')
-
         const endX = x + Math.cos(rotation) * this.laserLength;
         const endY = y + Math.sin(rotation) * this.laserLength;
 

@@ -28,6 +28,11 @@ export class Alien2 extends Alien {
         });
 
         this.setScale(this._scale);
+        this.body?.setSize(this.width * 0.6, this.height * 0.5, true);
+        this.body?.setOffset(
+            (this.width - this.width * 0.6) / 2, // This centers the physics body horizontally
+            this.height * 0.3 // This moves the physics body down
+        );
     }
 
     move() {
@@ -43,9 +48,9 @@ export class Alien2 extends Alien {
             repeat: -1,
         });
 
-        const randomSpeed = Phaser.Math.Between(5, this._speed);
-        // this.setVelocityX(-randomSpeed);
-        this.setVelocityX(-1);
+        const randomSpeed = Phaser.Math.Between(15, this._speed);
+        this.setVelocityX(-randomSpeed);
+        // this.setVelocityX(-1);
     }
 }
 

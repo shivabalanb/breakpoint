@@ -1,14 +1,19 @@
 export abstract class Alien extends Phaser.Physics.Arcade.Sprite {
     protected _name: string;
-    protected _health: number;
-    protected _speed: number;
+    public _health: number;
+    public _speed: number;
     protected _scale: number;
     protected _damage: number;
+    public _isInvincible: boolean = true;
 
     constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
         super(scene, x, y, texture);
         scene.add.existing(this);
         scene.physics.add.existing(this);
+
+        this.scene.time.delayedCall(500, () => {
+            this._isInvincible = false;
+        });
     }
 
     init() {
@@ -18,6 +23,10 @@ export abstract class Alien extends Phaser.Physics.Arcade.Sprite {
             );
         }
         this.move();
+    }
+
+    setSpeed(speed: number) {
+        this._speed = speed;
     }
 
     getDamage() {

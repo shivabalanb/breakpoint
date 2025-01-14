@@ -11,6 +11,7 @@ export enum Direction {
 export abstract class Vanguard extends Phaser.GameObjects.Sprite {
     public scene: Scene;
     protected projectiles: Phaser.Physics.Arcade.Group;
+    public _name: string;
     public _ammo: number;
     public _maxAmmo: number;
 
@@ -63,8 +64,6 @@ export abstract class Vanguard extends Phaser.GameObjects.Sprite {
     public anim(key: string) {
         if (!this.anims.isPlaying) {
             this.play(key);
-        } else {
-            console.log("playing animation");
         }
     }
 }

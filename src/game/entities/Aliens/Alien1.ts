@@ -8,7 +8,7 @@ export class Alien1 extends Alien {
 
         this._name = "scythe";
         this._health = 200;
-        this._speed = 150;
+        this._speed = 80;
         this._scale = 1.4;
         this._damage = 50;
 
@@ -24,6 +24,9 @@ export class Alien1 extends Alien {
         });
 
         this.setScale(this._scale);
+        const radius = (this.width * 0.5) / 2; // 70% of sprite width
+        this.body?.setCircle(radius);
+        this.body?.setOffset(0, 30);
     }
 
     move() {
@@ -42,8 +45,7 @@ export class Alien1 extends Alien {
         });
 
         const randomSpeed = Phaser.Math.Between(60, this._speed);
-        // this.setVelocityX(-randomSpeed);
-        this.setVelocityX(-1);
+        this.setVelocityX(-randomSpeed);
     }
 }
 

@@ -12,25 +12,24 @@ export class RocketLauncher extends Vanguard {
     ) {
         super(scene, x, y, "vanguard_r", projectiles);
 
+        this._name = "vanguard_r";
+
         this._maxAmmo = 3;
         this._ammo = this._maxAmmo;
         this._fireRate = 400;
         this._reloadTime = 5000;
 
         this.anims.create({
-            key: "vanguard_r",
-            frames: this.anims.generateFrameNumbers("vanguard_r", {
+            key: this._name,
+            frames: this.anims.generateFrameNumbers(this._name, {
                 start: 0,
                 end: 5,
             }),
-            frameRate: 10,
-            repeat: -1,
+            frameRate: 20,
         });
     }
 
     shoot(x: number, y: number, rotation: number) {
-        this.anim("vanguard_r");
-
         this._ammo--;
         let projectile = new Rocket(this.scene, x, y);
         this.projectiles.add(projectile, true);

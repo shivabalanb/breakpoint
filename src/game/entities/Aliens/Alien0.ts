@@ -1,17 +1,12 @@
 import { Alien } from "./Alien";
 
 export class Alien0 extends Alien {
-    constructor(scene: Phaser.Scene) {
-        const x = scene.cameras.main.width;
-        const y = Phaser.Math.Between(
-            scene.cameras.main.height - 120,
-            scene.cameras.main.height - 180
-        );
+    constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y, "alien0");
 
         this._name = "voidling";
         this._health = 100;
-        this._speed = 100;
+        this._speed = 50;
         this._scale = 1.2;
         this._damage = 20;
 
@@ -27,6 +22,7 @@ export class Alien0 extends Alien {
         });
 
         this.setScale(this._scale);
+        this.body?.setSize(this.width * 0.7, this.height * 0.5, true);
     }
 
     move() {
@@ -43,7 +39,8 @@ export class Alien0 extends Alien {
         });
 
         const randomSpeed = Phaser.Math.Between(20, this._speed);
-        // this.setVelocityX(-randomSpeed);
-        this.setVelocityX(-1);
+        this.setVelocityX(-randomSpeed);
+        // this.setVelocityX(-1);
     }
 }
+

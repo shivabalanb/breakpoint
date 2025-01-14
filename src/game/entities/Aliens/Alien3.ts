@@ -28,6 +28,8 @@ export class Alien3 extends Alien {
         });
 
         this.setScale(this._scale);
+        this.body?.setSize(this.width * 0.7, this.height * 0.5, true);
+
     }
 
     move() {
