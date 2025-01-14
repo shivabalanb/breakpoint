@@ -8,7 +8,7 @@ export class Alien4 extends Alien {
         super(scene, x, y, "alien4");
 
         this._name = "trilox";
-        this._health = 250;
+        this._health = 500;
         this._speed = 60;
         this._scale = 1.5;
         this._damage = 200;
@@ -51,8 +51,8 @@ export class Alien4 extends Alien {
         });
 
         const randomSpeed = Phaser.Math.Between(30, this._speed);
-        // this.setVelocityX(-randomSpeed);
-        this.setVelocityX(-1);
+        this.setVelocityX(-randomSpeed);
+        // this.setVelocityX(-1);
     }
 }
 

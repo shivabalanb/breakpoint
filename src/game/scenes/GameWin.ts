@@ -14,8 +14,8 @@ export class GameWin extends Scene {
         this.camera.setBackgroundColor(0x000000);
 
         this.background = this.add
-            .image(512, 384, "background")
-            .setAlpha(0.6)
+            .image(512, 384, "game_won")
+            .setAlpha(0.9)
             .setTint(0x00ff00);
 
         // Main victory text

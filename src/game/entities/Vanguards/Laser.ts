@@ -16,13 +16,13 @@ export class Laser extends Vanguard {
     ) {
         super(scene, x, y, "vanguard_l", projectiles);
         this._name = "vanguard_l";
-        this._damage = 5000;
+        this._damage = 250;
 
         this._isReloading = false;
-        this._fireRate = 3000;
+        this._fireRate = 10000;
 
         this.laserLine = scene.add.line(0, 0, 0, 0, 0, 0, 0xff000);
-        this.laserLine.setLineWidth(10);
+        this.laserLine.setLineWidth(5);
         this.laserLine.setVisible(false);
 
         this.anims.create({
@@ -36,6 +36,11 @@ export class Laser extends Vanguard {
     }
 
     shoot(x: number, y: number, rotation: number): void {
+        this.scene.sound.play("laserSound", {
+            seek: 0.8,
+            rate: 2,
+        });
+
         const endX = x + Math.cos(rotation) * this.laserLength;
         const endY = y + Math.sin(rotation) * this.laserLength;
 

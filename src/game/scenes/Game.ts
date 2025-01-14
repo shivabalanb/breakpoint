@@ -28,6 +28,8 @@ export class Game extends Scene {
     private timerEvent: Phaser.Time.TimerEvent;
     private clickFlag: boolean;
 
+    private reloadSound: Phaser.Sound.BaseSound;
+
     constructor() {
         super("Game");
     }
@@ -35,6 +37,14 @@ export class Game extends Scene {
     create() {
         this.gameTimer = 0;
         this.bg = this.add.sprite(0, 0, "bg").setOrigin(0, 0);
+
+        this.reloadSound = this.scene.scene.sound.add("reloadSound");
+
+        this.scene.scene.sound.play("backgroundSound", {
+            loop: true,
+            volume: 1,
+            seek: 2,
+        });
 
         // entities: tower, gun, bullets, alien
         this.tower = new Tower(this, -10, 50);
@@ -95,13 +105,26 @@ export class Game extends Scene {
     }
 
     private handleTowerCollision(tower: any, alien: any) {
-        // tower.takeDamage(alien.getDamage());
+        tower.takeDamage(alien.getDamage());
         alien.destroy();
     }
 
     private handleProjectileAlienOverlap(projectile: any, alien: any) {
         if (projectile instanceof Rocket) {
             // Create explosion and handle area damage for rockets
+            const sound = this.sound.add("explosionSound");
+            sound.addMarker({
+                name: "explosion_short", // name is required for markers
+                start: 0, // start time in seconds
+                duration: 1, // duration in seconds
+                config: {
+                    volume: 1,
+                    rate: 1,
+                    seek: 1,
+                },
+            });
+            sound.play("explosion_short");
+
             const explosion = this.add.sprite(
                 projectile.x,
                 projectile.y,
@@ -215,11 +238,21 @@ export class Game extends Scene {
             this.scene.start("GameOver");
         }
         if (this.clickFlag) {
-            if (
-                this.vanguard._isReloading ||
+            const isCooldown =
                 this.time.now <
-                    this.vanguard._fireRate + this.vanguard._lastFired
-            ) {
+                this.vanguard._fireRate + this.vanguard._lastFired;
+            const isReloading = this.vanguard._isReloading;
+            if (isReloading || isCooldown) {
+                if (
+                    (isReloading ||
+                        (this.vanguard == this.laser && isCooldown)) &&
+                    !this.reloadSound.isPlaying
+                ) {
+                    this.reloadSound.play({
+                        seek: 3,
+                        rate: 3,
+                    });
+                }
                 this.vanguard._isFiring = false;
             } else {
                 this.vanguard._isFiring = true;
@@ -333,6 +366,21 @@ export class Game extends Scene {
             default:
                 break;
         }
+
+        const isCooldown =
+            this.time.now < this.vanguard._fireRate + this.vanguard._lastFired;
+        const isReloading = this.vanguard._isReloading;
+
+        if (
+            (isReloading || (this.vanguard == this.laser && isCooldown)) &&
+            !this.reloadSound.isPlaying
+        ) {
+            this.reloadSound.play({
+                seek: 3,
+                rate: 3,
+            });
+        }
+
         this.vanguard.setVisible(true);
     }
 }

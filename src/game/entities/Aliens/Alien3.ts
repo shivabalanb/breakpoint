@@ -14,7 +14,7 @@ export class Alien3 extends Alien {
         this._health = 50;
         this._speed = 80;
         this._scale = 1;
-        this._damage = 60;
+        this._damage = 250;
 
         // animaiton
         this.anims.create({

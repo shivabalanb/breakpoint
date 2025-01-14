@@ -18,10 +18,30 @@ export class Preloader extends Scene {
     preload() {
         this.load.setPath("assets");
 
+        this.load.image(
+            "main_menu",
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/main_menu.png"
+        );
+
+        this.load.image(
+            "game_over",
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/game_over.png"
+        );
+
+        this.load.image(
+            "game_won",
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/game_won.png"
+        );
+
+        this.load.image(
+            "how_to_play",
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/how_to_play.png"
+        );
+
         this.load.spritesheet(
             "bg",
-            "bg_spritesheet.png",
-            // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/ground.png"
+            // "bg_spritesheet.png",
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/bg_spritesheet.png",
             {
                 frameWidth: 1024,
                 frameHeight: 700,
@@ -29,7 +49,7 @@ export class Preloader extends Scene {
         );
         this.load.spritesheet(
             "tower",
-            "tower_spritesheet.png",
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/tower_spritesheet.png",
             // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/tower.png"
             {
                 frameWidth: 150,
@@ -40,7 +60,7 @@ export class Preloader extends Scene {
         // vangaurd
         this.load.spritesheet(
             "vanguard_m",
-            "vanguard_m_spritesheet.png",
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/vanguard_m_spritesheet.png",
             // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/gun.png"
             {
                 frameWidth: 150,
@@ -49,7 +69,7 @@ export class Preloader extends Scene {
         );
         this.load.spritesheet(
             "vanguard_r",
-            "vanguard_r_spritesheet.png",
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/vanguard_r_spritesheet.png",
             // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/gun.png"
             {
                 frameWidth: 150,
@@ -58,7 +78,7 @@ export class Preloader extends Scene {
         );
         this.load.spritesheet(
             "vanguard_l",
-            "vanguard_l_spritesheet.png",
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/vanguard_l_spritesheet.png",
             // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/gun.png"
             {
                 frameWidth: 150,
@@ -69,24 +89,28 @@ export class Preloader extends Scene {
         // projectiles
         this.load.image(
             "bullet",
-            "bullet.png"
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/bullet.png"
             // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/star.png"
         );
         this.load.image(
             "rocket",
-            "rocket.png"
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/rocket.png"
             // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/star.png"
         );
 
-        this.load.spritesheet("explosion", "explosion_spritesheet.png", {
-            frameWidth: 100,
-            frameHeight: 100,
-        });
+        this.load.spritesheet(
+            "explosion",
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/explosion_spritesheet.png",
+            {
+                frameWidth: 100,
+                frameHeight: 100,
+            }
+        );
 
         // aliens
         this.load.spritesheet(
             "alien0",
-            "alien0_spritesheet.png",
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/alien0_spritesheet.png",
             // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/alien0.png",
             {
                 frameWidth: 64,
@@ -95,7 +119,7 @@ export class Preloader extends Scene {
         );
         this.load.spritesheet(
             "alien1",
-            "alien1_spritesheet.png",
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/alien1_spritesheet.png",
             // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/alien0.png",
             {
                 frameWidth: 64,
@@ -104,7 +128,7 @@ export class Preloader extends Scene {
         );
         this.load.spritesheet(
             "alien2",
-            "alien2_spritesheet.png",
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/alien2_spritesheet.png",
             // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/alien0.png",
             {
                 frameWidth: 64,
@@ -113,7 +137,7 @@ export class Preloader extends Scene {
         );
         this.load.spritesheet(
             "alien3",
-            "alien3_spritesheet.png",
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/alien3_spritesheet.png",
             // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/alien0.png",
             {
                 frameWidth: 64,
@@ -122,21 +146,44 @@ export class Preloader extends Scene {
         );
         this.load.spritesheet(
             "alien4",
-            "alien4_spritesheet.png",
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/alien4_spritesheet.png",
             // "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/alien0.png",
             {
                 frameWidth: 64,
                 frameHeight: 64,
             }
         );
-        this.load.spritesheet("alien5", "alien5_spritesheet.png", {
-            frameWidth: 200,
-            frameHeight: 128,
-        });
+        this.load.spritesheet(
+            "alien5",
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/alien5_spritesheet.png",
+            {
+                frameWidth: 200,
+                frameHeight: 128,
+            }
+        );
+
+        this.load.audio("machineGunSound", [
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/machine_gun.mp3",
+        ]);
+        this.load.audio("rocketLauncherSound", [
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/rocket_launcher.mp3",
+        ]);
+        this.load.audio("laserSound", [
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/laser.mp3",
+        ]);
+        this.load.audio("explosionSound", [
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/explosion.mp3",
+        ]);
+        this.load.audio("reloadSound", [
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/reload.mp3",
+        ]);
+        this.load.audio("backgroundSound", [
+            "https://d2oy80xbq8q7r8.cloudfront.net/public/assets/background.mp3",
+        ]);
     }
 
     create() {
-        this.scene.start ("MainMenu");
+        this.scene.start("MainMenu");
     }
 }
 

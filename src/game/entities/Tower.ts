@@ -1,14 +1,15 @@
 export class Tower extends Phaser.Physics.Arcade.Sprite {
-    public health: number = 100;
+    public health: number = 500;
 
     constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y, "tower");
         scene.add.existing(this);
-        scene.physics.add.existing(this);
+        this.setOrigin(0, 0);
+
+        scene.physics.add.existing(this, true);
 
         this.setImmovable(true);
-        this.setOrigin(0, 0);
-        this.body?.setOffset(-5, 0);
+        this.body?.setOffset(-10, 0);
 
         this.anim();
     }

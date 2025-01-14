@@ -28,6 +28,12 @@ export class MachineGun extends Vanguard {
     }
 
     shoot(x: number, y: number, rotation: number) {
+        this.scene.sound.play("machineGunSound", {
+            seek: 4.5,
+            rate: 2.5,
+            volume: 0.2,
+        });
+
         this._ammo--;
         let projectile = new Bullet(this.scene, x, y);
         this.projectiles.add(projectile, true);

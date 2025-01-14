@@ -5,6 +5,7 @@ import { MainMenu } from "./scenes/MainMenu";
 import { AUTO, Game } from "phaser";
 import { Preloader } from "./scenes/Preloader";
 import { GameWin } from "./scenes/GameWin";
+import { HowToPlay } from "./scenes/HowToPlay";
 
 //  Find out more information about the Game Config at:
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
@@ -22,13 +23,13 @@ const config: Phaser.Types.Core.GameConfig = {
                 y: 0,
                 x: 0,
             },
-            debug: true,
+            // debug: true,
         },
     },
     scale: {
         autoCenter: Phaser.Scale.CENTER_BOTH, // Center the game horizontally and vertically
     },
-    scene: [Boot, Preloader, MainMenu, MainGame, GameOver, GameWin],
+    scene: [Boot, Preloader, MainMenu, HowToPlay, MainGame, GameOver, GameWin],
 };
 
 const StartGame = (parent: string) => {

@@ -30,6 +30,11 @@ export class RocketLauncher extends Vanguard {
     }
 
     shoot(x: number, y: number, rotation: number) {
+        this.scene.sound.play("rocketLauncherSound", {
+            seek: .8,
+            rate: 2,
+            volume: 0.5
+        });
         this._ammo--;
         let projectile = new Rocket(this.scene, x, y);
         this.projectiles.add(projectile, true);
