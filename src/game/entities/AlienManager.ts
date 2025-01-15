@@ -124,10 +124,7 @@ export class AlienManager {
                     y = 0;
                 let config;
                 if (AlienClass.name == "Alien0") {
-                    x =
-                        PhaserMath.Between(0, 1) == 1
-                            ? this.WIDTH + spawned * 10
-                            : this.WIDTH - spawned * 10;
+                    x = this.WIDTH;
                     y = PhaserMath.Between(this.HEIGHT - 50, this.HEIGHT - 200);
                 } else if (AlienClass.name == "Alien1") {
                     x =
