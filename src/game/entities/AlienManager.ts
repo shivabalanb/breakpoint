@@ -126,6 +126,7 @@ export class AlienManager {
                 if (AlienClass.name == "Alien0") {
                     x = this.WIDTH;
                     y = PhaserMath.Between(this.HEIGHT - 50, this.HEIGHT - 200);
+                    console.log(x, y);
                 } else if (AlienClass.name == "Alien1") {
                     x =
                         PhaserMath.Between(0, 1) == 1
