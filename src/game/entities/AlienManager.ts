@@ -20,7 +20,7 @@ interface AlienSpawnParams<T> {
 export class AlienManager {
     private scene: Phaser.Scene;
     private aliens: Phaser.Physics.Arcade.Group;
-    private wave: number = 5;
+    private wave: number = 1;
     private isBossBattle: boolean = false;
 
     private readonly GAME_DURATION: number = 300;
