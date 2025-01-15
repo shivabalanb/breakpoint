@@ -120,8 +120,8 @@ export class AlienManager {
                 )
                     return;
 
-                let x = 0,
-                    y = 0;
+                let x = this.WIDTH,
+                    y = PhaserMath.Between(this.HEIGHT - 50, this.HEIGHT - 200);
                 let config;
                 if (AlienClass.name == "Alien0") {
                     x = this.WIDTH;

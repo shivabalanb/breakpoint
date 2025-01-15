@@ -64,10 +64,10 @@ export class GameOver extends Scene {
             ease: "Power2",
         });
 
-        this.time.delayedCall(2000, () => {
-            this.cameras.main.fade(1000, 0, 0, 0);
-            this.time.delayedCall(1000, () => this.changeScene());
-        });
+        // this.time.delayedCall(2000, () => {
+        //     this.cameras.main.fade(1000, 0, 0, 0);
+        //     this.time.delayedCall(1000, () => this.changeScene());
+        // });
 
         EventBus.emit("current-scene-ready", this);
     }
