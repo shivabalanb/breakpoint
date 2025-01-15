@@ -315,6 +315,10 @@ export class AlienManager {
     ) {
         let alien;
 
+        if (AlienClass.name === "Alien0") {
+            console.log(x, y);
+        }
+
         alien = new AlienClass(this.scene, x, y);
         if (speed) {
             alien.setSpeed(speed);
